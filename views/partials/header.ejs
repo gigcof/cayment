@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>App</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.lite.min.css" integrity="sha512-rtKpq+tUiLpzSJ9MWw/nbRZjsGzTqFoh+cyzF8IVSAEO5TeQLCXCfELo/a1dLy/4Zc9SWyZ6YAPvrD+E4n4fZQ==" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-car.min.css" integrity="sha512-vpFf+ShbNFLKa6naBlMZXTroLsrJkFrUvyczr/OyFymcijnHczI/35t6C0y7PrwehYR/RDQ5MHNP/Msp+mWuKA==" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+  <a class="navbar-brand" href="/">Cayment</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+    	<% if(!currentUser){ %>
+						<li class="mr-5"><a href="/login" style="text-decoration: none;">Login</a></li>
+						<li><a href="/register" style="text-decoration: none;">Sign Up</a></li>
+					<% } else{ %>
+						<li class="mr-5"><a href="#" style="text-decoration: none;"><i class="fas fa-user-circle fa-lg"></i> Signed In as <%= currentUser.username %></a></li>
+						<li><a href="/logout" style="text-decoration: none;">Sign Out</a></li>
+					<% } %>
+    </ul>
+  </div>
+</nav>
+	<div class="container">
+		<% if (error && error.length > 0) { %>
+		<div class="alert alert-danger" role='alert' style="margin-top: 13px;"><%= error %></div>
+		<% } %>
+		<% if(success && success.length > 0) { %>
+		<div class="alert alert-success" role='alert' style="margin-top: 13px;"><%= success %></div>
+		<% } %>

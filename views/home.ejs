@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.lite.min.css" integrity="sha512-rtKpq+tUiLpzSJ9MWw/nbRZjsGzTqFoh+cyzF8IVSAEO5TeQLCXCfELo/a1dLy/4Zc9SWyZ6YAPvrD+E4n4fZQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-car.min.css" integrity="sha512-vpFf+ShbNFLKa6naBlMZXTroLsrJkFrUvyczr/OyFymcijnHczI/35t6C0y7PrwehYR/RDQ5MHNP/Msp+mWuKA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;800&display=swap" rel="stylesheet">
+    <style type="text/css">
+
+    body {
+      background-color: rgb(246, 247, 252) !important;
+      margin: 0;
+      padding: 0;
+    }
+
+      .a{
+  background:#3169d0;
+  color:#ffffff;
+  text-decoration:none;
+  padding:5px;
+  border-radius:5px;
+  display:inline-block;
+}
+.a i:before{
+  color:#ffffff;
+  display:inline-block;
+  margin-left:5px;
+}
+.test-input{
+  width:30%;
+  border:1px solid #d1d1d1;
+  padding:10px;
+  border-radius:5px;
+}
+
+.clipboard {
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 5px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 2.5rem;
+  max-width: 200px;
+  line-height: 2.5rem;
+  margin: auto;
+  text-align: center;
+  z-index: 1000;
+  display: none; 
+}
+.clipboard.active {
+    display: block; 
+}
+
+.card {
+  position: static;
+}
+
+.card-columns {
+  -webkit-column-count: 2;
+  -moz-column-count:2;
+  column-count: 2;
+}
+
+@media only screen and (max-width: 576px) {
+  .card-columns {
+    -webkit-column-count: 1;
+    -moz-column-count:1;
+    column-count: 1;
+}
+}
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light bg-light" style="background-color: white !important; box-shadow: none;">
+  <a class="navbar-brand" href="/" style="color: black; font-family: 'Comfortaa', cursive;"><img src="./images/logoblackbeta.png" alt="" style="width: 12rem;"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link ml-3 text-center" href="/home" style="color: black; box-sizing: border-box; border-radius: 2rem; width: 100%; background-color: rgb(246, 247, 252);"><b> Home </b> </a>
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link ml-3 text-center" style="color: black;">Support center</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+      <% if(!currentUser){ %>
+            <li class="mr-5"><a href="/login" style="text-decoration: none;">Login</a></li>
+            <li><a href="/register" style="text-decoration: none;">Sign Up</a></li>
+          <% } else{ %>
+            <li class="mr-5 text-center"><a href="#" class="text-center" style="text-decoration: none;"><i class="fas fa-user-circle fa-lg"></i> Signed In as <%= currentUser.username %></a></li>
+            <li class="text-center"><a href="/logout" class="text-center" style="text-decoration: none;">Sign Out</a></li>
+          <% } %>
+    </ul>
+  </div> 
+</nav>
+<span>
+<p class="border border-top pt-3 pb-3" style="padding-left: 11%; background-color: white !important; font-size: 30px; font-family: 'Heebo', sans-serif;">Welcome, <%= currentUser.username %>!</p>
+</span>
+  <div class="container">
+      <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger" role='alert' style="margin-top: 13px;"><%= error %></div>
+      <% } %>
+      <% if(success && success.length > 0) { %>
+      <div class="alert alert-success" role='alert' style="margin-top: 13px;"><%= success %></div>
+      <% } %>
+<section style="margin-top: 10px;">
+
+<% if(currentUser.kyc) {%>
+
+  <div class="card-columns">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title" style="color: #434d5a; font-family: 'Heebo', sans-serif; font-weight: 800;">Your current balance: <div class="counter" data-count="<%= currentUser.amount + ( currentUser.refferalCount * 250 ) %>" style="display: contents;"><strong>0</strong></div> CGX</h5>
+        <p class="card-text" style="color: #9BA3B1; font-family: 'Heebo', sans-serif;">
+          Your referral Link: <input value="localhost:3000/register?id=<%= currentUser._id %>" readonly style="width: 45%;"><a href="javascript:void(0)" data-link="localhost:3000/register?id=<%= currentUser._id %>" class="a ml-3">Copy Link <i class="fa fa-link"></i></a>
+          <span class="clipboard">Link Copied on Clipboard</span> <br>
+          <span style="color: #9BA3B1;">Refer your friends to earn 250 CGX Coins, Coinganga will also reward them with 250 CGX for using your referral link.</span> <br>
+          <span style="color: #9BA3B1;"><b><%= currentUser.refferalCount %></b> people have signed up using your referral link </span>
+        </p>
+      </div>
+    </div>
+    <div class="card p-3" style="background-color: white !important;">
+      <h5 class="text-left" style="font-weight: 800;"><strong>Price Chart</strong></h5>
+      <hr>
+      <!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+  {
+  "symbol": "COINBASE:BTCUSD",
+  "width": "100%",
+  "colorTheme": "light",
+  "isTransparent": false,
+  "locale": "en"
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+  {
+  "symbol": "COINBASE:ETHUSD",
+  "width": "100%",
+  "colorTheme": "light",
+  "isTransparent": false,
+  "locale": "en"
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+  {
+  "symbol": "COINBASE:XRPUSD",
+  "width": "100%",
+  "colorTheme": "light",
+  "isTransparent": false,
+  "locale": "en"
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+  {
+  "symbol": "COINBASE:LTCUSD",
+  "width": "100%",
+  "colorTheme": "light",
+  "isTransparent": false,
+  "locale": "en"
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+    </div>
+
+    <div class="card text-white text-left p-3">
+      <img class="card-img-top" src="images/new.png" alt="Card image cap" style="width: 80%; height: auto;">
+      <div class="card-body">
+        <h3 style="font-family: 'Heebo', sans-serif; font-weight: 800; color: #434d5a;">Exchange Launching Next Week</h3>
+        <h4 style="color: #9BA3B1; font-family: 'Heebo', sans-serif !important; font-size: 16px;">Congratulations! You'll be one of the first ones to use our platform. We'll notify you via email once our exchange is live.</h4>
+      </div>
+
+    </div>
+  </div>
+    <!-- TradingView Widget BEGIN -->
+<!-- <div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+</div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+  {
+  "colorTheme": "light",
+  "dateRange": "12m",
+  "showChart": true,
+  "locale": "en",
+  "largeChartUrl": "",
+  "isTransparent": false,
+  "width": "400",
+  "height": "660",
+  "plotLineColorGrowing": "rgba(33, 150, 243, 1)",
+  "plotLineColorFalling": "rgba(33, 150, 243, 1)",
+  "gridLineColor": "rgba(240, 243, 250, 1)",
+  "scaleFontColor": "rgba(120, 123, 134, 1)",
+  "belowLineFillColorGrowing": "rgba(33, 150, 243, 0.12)",
+  "belowLineFillColorFalling": "rgba(33, 150, 243, 0.12)",
+  "symbolActiveColor": "rgba(33, 150, 243, 0.12)",
+  "tabs": [
+    {
+      "title": "Cryptocurrencies",
+      "symbols": [
+        {
+          "s": "BITSTAMP:BTCUSD",
+          "d": "Bitcoin"
+        },
+        {
+          "s": "BINANCE:ETHUSD",
+          "d": "Ethereum"
+        },
+        {
+          "s": "BITSTAMP:XRPUSD",
+          "d": "Ripple"
+        },
+        {
+          "s": "BINANCE:BCHUSD",
+          "d": "Bitcoin Cash"
+        },
+        {
+          "s": "BINANCE:BNBUSD",
+          "d": "Binance Coin"
+        },
+        {
+          "s": "BINANCE:LTCUSD",
+          "d": "Litecoin"
+        }
+      ]
+    }
+  ]
+}
+  </script> -->
+<!-- TradingView Widget END -->
+  </div>
+</section>
+<% } else { %>
+  <%if(currentUser.rejectKyc) { %>
+    <div class="alert alert-danger" role='alert' style="margin-top: 13px;">Sorry to tell you that your KYC has not been approved as we couldn’t verify your documents properly. Please resubmit your KYC, or if you think we’ve made a mistake then mail us at kyc@coinganga.com with your full name and email id as subject.</div>
+  <%}%>
+<p style="font-size: 20px;">Please verify your identity</p>
+	<form action="https://smartforms.dev/submit/5fc21e92b81854118fd3ece3" method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="Name">Name</label>
+    <input type="text" class="form-control" id="Name" aria-describedby="nameHelp" name="Name" placeholder="Enter name"  />
+    <small id="nameHelp" class="form-text text-muted">Your complete name as mentioned in your ID proof.</small>
+  </div>
+  <div class="form-group">
+    <label for="DateOfBirth">Date Of Birth</label>
+    <input type="date" class="form-control" id="DateOfBirth" aria-describedby="dateHelp" name="DateOfBirth" placeholder="Date"  />
+    <small id="dateHelp" class="form-text text-muted">Your birth date as mentioned in your provided documents.</small>
+  </div>
+  <div class="form-group">
+    <label for="Address">Address</label>
+    <input type="text" class="form-control" id="Address" aria-describedby="addressHelp" name="Address" placeholder="Address"  />
+    <small id="addressHelp" class="form-text text-muted">Your complete address as mentioned in your ID proof.</small>
+  </div><br>
+  <h3 class="text-center">Documents</h3>
+  <div class="form-group">
+    <label for="anumber">Aadhar card Number</label>
+    <input type="number" class="form-control" id="anumber" aria-describedby="anumberHelp" name="AadharCardNumber" placeholder="Aadhar card number"  />
+  </div>
+  <div class="row">
+  	<div class="col-lg-6">
+  <div class="form-group">
+    <label for="fi">Aadhar card front Image</label>
+    <input type="file" class="form-control image" id="fi" aria-describedby="fi" name="AadharFrontImage" accept="image/*" placeholder="front image" />
+    <small id="fi" class="form-text text-muted">Size Limit: 400KB</small>
+  </div>
+  </div>
+  <div class="col-lg-6">
+  	<div class="form-group">
+    <label for="bi">Aadhar card back Image</label>
+    <input type="file" class="form-control image" id="bi" aria-describedby="bi" name="AadharBackImage"  placeholder="back image"  />
+    <small id="bi" class="form-text text-muted">Size Limit: 400KB</small>
+  </div>
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="pnumber">Pan card Number</label>
+    <input type="number" class="form-control" id="pnumber" aria-describedby="pnumberHelp" name="PanCardNumber" accept="image/*" placeholder="Pan card number"  />
+  </div>
+  <div class="form-group">
+    <label for="pi">PAN card front Image</label>
+    <input type="file" class="form-control image" id="pi" aria-describedby="pi" accept="image/*" name="PanImage" placeholder="front image" />
+    <small id="pi" class="form-text text-muted">Size Limit: 400KB</small>
+  </div>
+  <div class="form-group">
+    <label for="pi">Upload Selfie while holding your Aadhar Card.</label>
+    <input type="file" class="form-control image" id="selfie" aria-describedby="selfie" accept="image/*" name="Selfie" placeholder="Selfie" />
+    <small id="selfie" class="form-text text-muted">Size Limit: 400KB</small>
+  </div>
+  <h5>Resize your images <a href="https://www.reduceimages.com/">here</a></h5>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<% } %>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript">
+  $('.counter').each(function() {
+  var $this = $(this),
+      countTo = $this.attr('data-count');
+  
+  $({ countNum: $this.text()}).animate({
+    countNum: countTo
+  },
+
+  {
+
+    duration: 1000,
+    easing:'linear',
+    step: function() {
+      $this.text(Math.floor(this.countNum));
+    },
+    complete: function() {
+      $this.text(this.countNum);
+      //alert('finished');
+    }
+
+  });  
+  
+  
+
+});
+
+   function CopyToClipBoard(element) {
+    var $blankInput = $("<input>");
+    $("body").append($blankInput);
+    $blankInput.val($(element).attr("data-link")).select();
+    document.execCommand("copy");
+    $blankInput.remove();
+  }
+
+  $('a').click(function(){
+    CopyToClipBoard(this);
+    $('.clipboard').addClass('active');
+    setTimeout(function(){                      $('.clipboard').removeClass('active');
+    },1000);
+  });
+var uploadField = document.getElementById("fi");
+
+uploadField.onchange = function() {
+    if(this.files[0].size > 419430){
+       alert("File is too big! It must be less than 400KB.");
+       this.value = "";
+    };
+};
+
+var uploadField1 = document.getElementById("bi");
+
+uploadField1.onchange = function() {
+    if(this.files[0].size > 419430){
+       alert("File is too big! It must be less than 400KB.");
+       this.value = "";
+    };
+};
+
+var uploadField2 = document.getElementById("pi");
+
+uploadField2.onchange = function() {
+    if(this.files[0].size > 419430){
+       alert("File is too big! It must be less than 400KB.");
+       this.value = "";
+    };
+};
+
+var uploadField3 = document.getElementById("selfie");
+
+uploadField3.onchange = function() {
+    if(this.files[0].size > 419430){
+       alert("File is too big! It must be less than 400KB.");
+       this.value = "";
+    };
+};
+</script>
+
+
+<%- include("./partials/footer") %>
